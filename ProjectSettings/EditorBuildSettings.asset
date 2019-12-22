@@ -5,15 +5,6 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Allon/Main.unity
-    guid: 3637498c03c93a74e9791e0753cd86e1
-  - enabled: 0
-    path: Assets/Allon/NOT NOW/ServerScene.unity
-    guid: 1ed0f7b297549a74b995c7589d9a4ffd
-  - enabled: 0
-    path: Assets/Allon/NOT NOW/ClientScene.unity
-    guid: 6ff6ae623fd454b4984f7a4ebab078e7
   - enabled: 1
     path: Assets/Allon/SyncVar/Main.unity
     guid: 1c930fd8b4226bb4d847bd16a0ec8d1b

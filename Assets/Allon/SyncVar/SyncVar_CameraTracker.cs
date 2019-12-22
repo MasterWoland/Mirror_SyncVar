@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
@@ -13,6 +14,8 @@ public class SyncVar_CameraTracker : NetworkBehaviour
 
     public bool IsMainCameraOnServer = false;
     public Camera _mainCamera;
+
+    public bool DoMoveCameraOnClient = false;
 
     public override void OnStartServer()
     {
@@ -33,12 +36,21 @@ public class SyncVar_CameraTracker : NetworkBehaviour
 
     private void UpdateCameraPosition(Vector3 pos)
     {
-        Debug.Log("[CLIENT] pos = " + pos);
+//        Debug.Log("[CLIENT] pos = " + pos);
+        if (DoMoveCameraOnClient)
+        {
+            Camera.main.transform.position = pos;
+        }
     }
 
     private void UpdateCameraRotation(Quaternion rot)
     {
-        Debug.Log("[CLIENT] rotation = " + rot);
+//        Debug.Log("[CLIENT] rotation = " + rot);
+
+        if (DoMoveCameraOnClient)
+        {
+            Camera.main.transform.rotation = rot;
+        }
     }
 
     private IEnumerator TrackMainCamera()
@@ -50,8 +62,26 @@ public class SyncVar_CameraTracker : NetworkBehaviour
             _position = Camera.main.transform.position;
             _rotation = Camera.main.transform.rotation;
 
-            Debug.Log("___server coroutine___");
+//            Debug.Log("___server coroutine___");
             yield return wait;
         }
     }
+
+    // -------- EVENTS ----------
+    private void OnEnable()
+    {
+        CanvasManager.OnToggleMoveCameraOnClient += ToggleDoMoveCameraOnClient;
+    }
+
+    private void OnDisable()
+    {
+        CanvasManager.OnToggleMoveCameraOnClient += ToggleDoMoveCameraOnClient;
+    }
+
+    public void ToggleDoMoveCameraOnClient()
+    {
+        DoMoveCameraOnClient = !DoMoveCameraOnClient;
+    }
+
+    // --------------------------
 }

@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   serverOnly: 0
   m_AssetId: 
-  m_SceneId: 881636346
+  m_SceneId: 4028475775
 --- !u!114 &2036792734482127778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60,8 +60,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
-  syncInterval: 0.1
+  syncInterval: 0
   _position: {x: 0, y: 0, z: 0}
   _rotation: {x: 0, y: 0, z: 0, w: 0}
   IsMainCameraOnServer: 0
   _mainCamera: {fileID: 0}
+  _doMoveCameraOnClient: 0
