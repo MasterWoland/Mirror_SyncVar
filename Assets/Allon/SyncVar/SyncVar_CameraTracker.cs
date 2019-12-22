@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class SyncVar_CameraTracker : NetworkBehaviour
 {
+    public bool DoMoveCameraOnClient = false;
+    
     [SyncVar(hook = nameof(UpdateCameraPosition))]
     public Vector3 _position;
 
@@ -14,9 +16,8 @@ public class SyncVar_CameraTracker : NetworkBehaviour
 
     public bool IsMainCameraOnServer = false;
     public Camera _mainCamera;
-
-    public bool DoMoveCameraOnClient = false;
-
+    public Camera _clientCamera;
+    
     public override void OnStartServer()
     {
         base.OnStartServer();
@@ -25,44 +26,45 @@ public class SyncVar_CameraTracker : NetworkBehaviour
         StartCoroutine(TrackMainCamera());
     }
 
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+
+        _clientCamera = Camera.main;
+    }
+
     private void FindMainCamera()
     {
         _mainCamera = Camera.main;
-        if (_mainCamera)
-        {
-            IsMainCameraOnServer = true;
-        }
+        if (_mainCamera) IsMainCameraOnServer = true;
     }
 
     private void UpdateCameraPosition(Vector3 pos)
     {
-//        Debug.Log("[CLIENT] pos = " + pos);
         if (DoMoveCameraOnClient)
         {
-            Camera.main.transform.position = pos;
+            _clientCamera.transform.position = pos;
         }
     }
 
     private void UpdateCameraRotation(Quaternion rot)
     {
-//        Debug.Log("[CLIENT] rotation = " + rot);
-
         if (DoMoveCameraOnClient)
         {
-            Camera.main.transform.rotation = rot;
+            _clientCamera.transform.rotation = rot;
         }
     }
 
     private IEnumerator TrackMainCamera()
     {
         WaitForEndOfFrame wait = new WaitForEndOfFrame();
-
+        var _mainCamTF = _mainCamera.transform;
+        
         while (IsMainCameraOnServer)
         {
-            _position = Camera.main.transform.position;
-            _rotation = Camera.main.transform.rotation;
-
-//            Debug.Log("___server coroutine___");
+            _position = _mainCamTF.position;
+            _rotation = _mainCamTF.rotation;
+            
             yield return wait;
         }
     }
